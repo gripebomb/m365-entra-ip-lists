@@ -68,10 +68,10 @@ All list files are plain text with one CIDR per line, for example:
 | Hetzner | https://bgp.he.net/AS24940#_prefixes |
 | Hostinger | Manual extraction (no public API) |
 | Linode | https://geoip.linode.com/ |
-| OVH | https://www.ovh.com/manager/dedicated/allowerlist.json |
+| OVH | Manual extraction (no public API) |
 | ProtonVPN | https://protonvpn.com/vpn-servers |
 | Tor Exit Nodes | https://check.torproject.org/exit-addresses |
-| Vultr | https://www.vultr.com/resources/faq/#downloadableIPRanges |
+| Vultr | https://geofeed.constant.com/?text |
 
 ## Intended Microsoft 365 / Entra Usage
 

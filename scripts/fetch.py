@@ -4,11 +4,9 @@
 import argparse
 import ipaddress
 import json
-import re
 import sys
 import urllib.request
 import urllib.error
-from datetime import datetime
 from pathlib import Path
 
 
@@ -29,21 +27,24 @@ PROVIDERS = {
         'parser': 'linode_text',
         'output': 'lists/providers/linode.txt',
     },
-    'ovh': {
-        'url': 'https://www.ovh.com/manager/dedicated/allowerlist.json',
-        'parser': 'ovh_json',
-        'output': 'lists/providers/ovh.txt',
-    },
     'tor': {
         'url': 'https://check.torproject.org/exit-addresses',
         'parser': 'tor_exit',
         'output': 'lists/providers/tor-exit-nodes.txt',
     },
     'vultr': {
-        'url': 'https://www.vultr.com/resources/faq/#downloadableIPRanges',
-        'parser': 'vultr_html',
+        'url': 'https://geofeed.constant.com/?text',
+        'parser': 'vultr_text',
         'output': 'lists/providers/vultr.txt',
     },
+}
+
+# Providers that require manual extraction (no public API)
+MANUAL_PROVIDERS = {
+    'hetzner': 'https://bgp.he.net/AS24940#_prefixes',
+    'hostinger': None,
+    'ovh': None,  # Old API deprecated, now requires manual extraction
+    'protonvpn': 'https://protonvpn.com/vpn-servers',
 }
 
 
@@ -104,26 +105,6 @@ def parse_linode_text(content: str) -> list[str]:
     return cidrs
 
 
-def parse_ovh_json(content: str) -> list[str]:
-    """Parse OVH JSON format."""
-    data = json.loads(content)
-    cidrs = []
-
-    # OVH format is a dict with region keys
-    if isinstance(data, dict):
-        for region, networks in data.items():
-            if isinstance(networks, list):
-                for net in networks:
-                    if isinstance(net, str):
-                        cidrs.append(net)
-    elif isinstance(data, list):
-        for net in data:
-            if isinstance(net, str):
-                cidrs.append(net)
-
-    return cidrs
-
-
 def parse_tor_exit(content: str) -> list[str]:
     """Parse Tor exit addresses format."""
     cidrs = []
@@ -138,28 +119,29 @@ def parse_tor_exit(content: str) -> list[str]:
     return cidrs
 
 
-def parse_vultr_html(content: str) -> list[str]:
-    """Parse Vultr HTML page for CIDR ranges."""
+def parse_vultr_text(content: str) -> list[str]:
+    """Parse Vultr geofeed text format."""
     cidrs = []
-    # Look for CIDR patterns in the HTML
-    cidr_pattern = r'\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})\b'
-    matches = re.findall(cidr_pattern, content)
-    for match in matches:
+    for line in content.strip().split('\n'):
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        # Plain text format: one CIDR per line
         try:
-            ipaddress.ip_network(match, strict=False)
-            cidrs.append(match)
+            network = ipaddress.ip_network(line, strict=False)
+            if network.version == 4:
+                cidrs.append(line)
         except ValueError:
             continue
-    return list(set(cidrs))  # Remove duplicates
+    return cidrs
 
 
 PARSERS = {
     'aws_json': parse_aws_json,
     'digitalocean_csv': parse_digitalocean_csv,
     'linode_text': parse_linode_text,
-    'ovh_json': parse_ovh_json,
     'tor_exit': parse_tor_exit,
-    'vultr_html': parse_vultr_html,
+    'vultr_text': parse_vultr_text,
 }
 
 
@@ -239,9 +221,15 @@ def main():
     args = parser.parse_args()
 
     if args.list:
-        print("Available providers:")
+        print("Available providers (automated):")
         for name, config in sorted(PROVIDERS.items()):
             print(f"  {name}: {config['url']}")
+        print("\nManual providers (no public API):")
+        for name, url in sorted(MANUAL_PROVIDERS.items()):
+            if url:
+                print(f"  {name}: {url}")
+            else:
+                print(f"  {name}: (manual extraction required)")
         sys.exit(0)
 
     # Determine which providers to fetch

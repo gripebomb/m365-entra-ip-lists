@@ -28,9 +28,10 @@
       "cidr_count": 5132
     },
     "ovh": {
-      "source": "https://www.ovh.com/manager/dedicated/allowerlist.json",
+      "source": null,
       "last_updated": "2026-02-12",
-      "cidr_count": 599
+      "cidr_count": 599,
+      "note": "Manual extraction - old API deprecated"
     },
     "protonvpn": {
       "source": "https://protonvpn.com/vpn-servers",
@@ -44,7 +45,7 @@
       "cidr_count": 1372
     },
     "vultr": {
-      "source": "https://www.vultr.com/resources/faq/#downloadableIPRanges",
+      "source": "https://geofeed.constant.com/?text",
       "last_updated": "2026-02-12",
       "cidr_count": 434
     }
