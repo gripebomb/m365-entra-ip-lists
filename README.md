@@ -16,6 +16,7 @@ lists/
     ovh/
     protonvpn/
     tor-exit-nodes/
+    vpn/
     vultr/
 ```
 
@@ -31,6 +32,7 @@ lists/
 - `ovh.txt` (599 CIDRs)
 - `protonvpn.txt` (830 CIDRs)
 - `tor-exit-nodes.txt` (1,372 CIDRs)
+- `vpn.txt` (10,762 CIDRs)
 - `vultr.txt` (434 CIDRs)
 
 ### `lists/chunks/`
@@ -48,6 +50,12 @@ lists/
 - `ovh/ovh-part-001.txt` (599 CIDRs)
 - `protonvpn/protonvpn-part-001.txt` (830 CIDRs)
 - `tor-exit-nodes/tor-exit-nodes-part-001.txt` (1,372 CIDRs)
+- `vpn/vpn-part-001.txt` (2,000 CIDRs)
+- `vpn/vpn-part-002.txt` (2,000 CIDRs)
+- `vpn/vpn-part-003.txt` (2,000 CIDRs)
+- `vpn/vpn-part-004.txt` (2,000 CIDRs)
+- `vpn/vpn-part-005.txt` (2,000 CIDRs)
+- `vpn/vpn-part-006.txt` (762 CIDRs)
 - `vultr/vultr-part-001.txt` (434 CIDRs)
 
 ## Formatting Standard
@@ -71,6 +79,7 @@ All list files are plain text with one CIDR per line, for example:
 | OVH | Manual extraction (no public API) |
 | ProtonVPN | https://protonvpn.com/vpn-servers |
 | Tor Exit Nodes | https://check.torproject.org/exit-addresses |
+| VPN (Combined) | https://github.com/X4BNet/lists_vpn |
 | Vultr | https://geofeed.constant.com/?text |
 
 ## Intended Microsoft 365 / Entra Usage

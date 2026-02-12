@@ -41,6 +41,11 @@ PROVIDERS = {
         'parser': 'vultr_text',
         'output': 'lists/providers/vultr.txt',
     },
+    'vpn': {
+        'url': 'https://raw.githubusercontent.com/X4BNet/lists_vpn/main/output/vpn/ipv4.txt',
+        'parser': 'plain_text',
+        'output': 'lists/providers/vpn.txt',
+    },
 }
 
 # Providers that require manual extraction (no public API)
@@ -140,12 +145,18 @@ def parse_vultr_text(content: str) -> list[str]:
     return cidrs
 
 
+def parse_plain_text(content: str) -> list[str]:
+    """Parse plain text CIDR format (one CIDR per line)."""
+    return parse_vultr_text(content)  # Same logic
+
+
 PARSERS = {
     'aws_json': parse_aws_json,
     'digitalocean_csv': parse_digitalocean_csv,
     'linode_text': parse_linode_text,
     'tor_exit': parse_tor_exit,
     'vultr_text': parse_vultr_text,
+    'plain_text': parse_plain_text,
 }
 
 

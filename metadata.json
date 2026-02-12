@@ -44,6 +44,12 @@
       "last_updated": "2026-02-12",
       "cidr_count": 1372
     },
+    "vpn": {
+      "source": "https://raw.githubusercontent.com/X4BNet/lists_vpn/main/output/vpn/ipv4.txt",
+      "last_updated": "2026-02-12",
+      "cidr_count": 10762,
+      "note": "Combined VPN providers from X4BNet (includes NordVPN, Surfshark, etc.)"
+    },
     "vultr": {
       "source": "https://geofeed.constant.com/?text",
       "last_updated": "2026-02-12",
