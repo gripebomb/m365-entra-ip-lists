@@ -51,11 +51,9 @@ jobs:
             - Validated CIDR format
           branch: refresh-ip-lists
           delete-branch: true
-      
-      - name: Enable auto-merge
+
+      - name: Merge Pull Request
         if: steps.changes.outputs.changed == 'true'
-        run: |
-          gh api -X PUT "repos/${{ github.repository }}/pulls/${{ steps.cpr.outputs.pull-request-number }}/auto_merge" \
-            -H "Accept: application/vnd.github+json"
+        run: gh pr merge ${{ steps.cpr.outputs.pull-request-number }} --merge --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
