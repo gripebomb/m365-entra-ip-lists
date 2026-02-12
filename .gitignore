@@ -1,2 +1,5 @@
 # Claude Code settings
 .claude/
+
+# Claude Code Guide agent
+claude-code-guide/
